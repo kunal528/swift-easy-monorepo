@@ -67,7 +67,7 @@ const Home = () => {
           </p>
           <div className="flex justify-center">
             <a
-              href="https://github.com/Code-Decoders/swiftx-monorepo/releases/download/app/app-release.apk"
+              href="https://github.com/kunal528/swift-ease-monorepo/releases/download/application/app-release.apk"
               className="inline-block"
             >
               <button className="bg-white text-blue-600 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors duration-300">

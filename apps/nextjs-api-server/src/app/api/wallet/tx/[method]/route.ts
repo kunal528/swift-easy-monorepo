@@ -8,6 +8,40 @@ const appSecret: string = process.env.NEXT_PUBLIC_PRIVY_APP_SECRET || "";
 const authorizationPrivateKey =
   process.env.NEXT_PUBLIC_PRIVY_WALLET_API_AUTHORIZATION_PRIVATE_KEY || "";
 
+function switchTokenContract(type: string) {
+  switch (type) {
+    case "Mantle":
+      return "";
+    case "Flow":
+      return "0xE5A8eB6725aB1661e174DCB0C3b9e6A1c2ba77Cc";
+    case "Scroll":
+      return "";
+  }
+}
+
+function switchChainId(type: string) {
+  switch (type) {
+    case "Mantle":
+      return 5003;
+    case "Flow":
+      return 545;
+    case "Scroll":
+      return 534351;
+  }
+}
+
+
+function switchRpcUrl(type: string) {
+  switch (type) {
+    case "Mantle":
+      return "https://rpc.mantle.xyz";
+    case "Flow":
+      return "https://rpc.sepolia.mantle.xyz";
+    case "Scroll":
+      return "https://rpc.scroll.network";
+  }
+}
+
 export async function POST(
   req: NextRequest,
   { params }: { params: { method: string } }
@@ -20,11 +54,11 @@ export async function POST(
 
   const { method } = params;
 
-  const { paramSign, phone } = await req.json();
+  const { paramSign, type, phone } = await req.json();
 
-  const contractAddress = "0xE5A8eB6725aB1661e174DCB0C3b9e6A1c2ba77Cc";
+  const contractAddress = switchTokenContract(type);
 
-  const chainId = 545;
+  const chainId = switchChainId(type);
 
   const abi = [
     "function initTransfer(uint256,uint256,address) payable",
@@ -44,7 +78,7 @@ export async function POST(
     const walletAddress = user?.wallet?.address;
 
     const provider = new ethers.JsonRpcProvider(
-      "https://rpc.sepolia.mantle.xyz"
+      switchRpcUrl(type)
     );
 
     // get estimated gas
@@ -67,7 +101,7 @@ export async function POST(
       method: "eth_signTransaction",
       params: {
         transaction: {
-          to: contractAddress,
+          to: contractAddress || "0x",
           chainId: chainId,
           value: 10 ** 18,
           gasLimit: `0x${ethers.toBeHex(estimatedGas).slice(2)}`,
