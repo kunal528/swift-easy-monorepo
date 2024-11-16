@@ -1,0 +1,38 @@
+{
+  "name": "dev-pg-swiftx",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -H 0.0.0.0 -p 8080",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@circle-fin/developer-controlled-wallets": "^4.5.1",
+    "@privy-io/server-auth": "^1.16.3",
+    "@supabase/ssr": "^0.5.1",
+    "@supabase/supabase-js": "^2.45.4",
+    "@types/uuid": "^10.0.0",
+    "autoprefixer": "^10.4.20",
+    "ethers": "^6.13.4",
+    "next": "14.2.15",
+    "postcss": "^8.4.47",
+    "react": "^18",
+    "react-dom": "^18",
+    "supabase": "^1.204.3",
+    "tailwindcss": "^3.4.13",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.15",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5"
+  }
+}
