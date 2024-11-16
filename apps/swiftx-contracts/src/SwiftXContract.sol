@@ -15,7 +15,8 @@ contract SwiftEasy is AxelarExecutable, Ownable {
         address recipient;
         uint256 amount;
     }
-
+// 100000000000000000000
+// 0x7d3a7244B29B9775dB59B239bC1d62f853C9CEFD
     IAxelarGasService public immutable gasService;
 
     mapping(uint256 => SwiftEasyMetadata) public ledger;

@@ -55,6 +55,8 @@ contract SwiftEasyToken is ERC20, AxelarExecutable {
             msg.sender
         );
 
+        _completeTransfer(txId, amount, recipient);
+
         gateway().callContract(parentChain, parentContract, payload);
     }
 
@@ -106,11 +108,5 @@ contract SwiftEasyToken is ERC20, AxelarExecutable {
         string calldata,
         bytes calldata payload
     ) internal override {
-        (uint256 txId, uint256 amount, address recipient) = abi.decode(
-            payload,
-            (uint256, uint256, address)
-        );
-
-        _completeTransfer(txId, amount, recipient);
     }
 }

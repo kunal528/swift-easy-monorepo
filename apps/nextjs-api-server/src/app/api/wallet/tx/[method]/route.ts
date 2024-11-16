@@ -22,9 +22,9 @@ export async function POST(
 
   const { paramSign, phone } = await req.json();
 
-  const contractAddress = "0x8EA46796bD806a053AA76AD9F57CF4E151A0b15A";
+  const contractAddress = "0xE5A8eB6725aB1661e174DCB0C3b9e6A1c2ba77Cc";
 
-  const chainId = 5003;
+  const chainId = 545;
 
   const abi = [
     "function initTransfer(uint256,uint256,address) payable",
@@ -98,7 +98,7 @@ export async function POST(
     // });
 
     return NextResponse.json(
-      {hash: signedData.hash},
+      { hash: signedData.hash },
       {
         status: 200,
       }
