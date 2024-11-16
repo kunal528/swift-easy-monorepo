@@ -21,7 +21,7 @@ const swiftXAPICall = async (
   body: any,
 ) => {
   const response = await fetch(
-    "https://swiftx-nextjs.vercel.app/api/wallet/tx/" + method,
+    "https://swift-easy-ethbangkok.vercel.app/api/wallet/tx/" + method,
     {
       method: "POST",
       headers: {
@@ -35,7 +35,7 @@ const swiftXAPICall = async (
 
 const createWallet = async (email: string) => {
   const response = await fetch(
-    "https://swiftx-nextjs.vercel.app/api/wallet",
+    "https://swift-easy-ethbangkok.vercel.app/api/wallet",
     {
       method: "POST",
       headers: {
