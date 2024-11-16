@@ -1,6 +1,6 @@
 # Swift Easy Monorepo
 
-![Swift Easy Logo](https://i.imgur.com/aFCddFa.png)
+![Swift Easy Logo](https://i.imgur.com/ZZc9r4L.png)
 
 Welcome to the Swift Easy Monorepo! This repository contains all the projects and packages related to the Swift Easy ecosystem.
 
