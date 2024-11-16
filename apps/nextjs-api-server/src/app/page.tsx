@@ -84,15 +84,6 @@ const Home = () => {
           <p className="text-sm">
             &copy; {new Date().getFullYear()} Swift Ease. All rights reserved.
           </p>
-          <p className="text-sm">
-            Developed by{" "}
-            <a
-              href="https://codedecoders.io"
-              className="text-blue-500 hover:underline"
-            >
-              Code Decoders
-            </a>
-          </p>
         </div>
       </footer>
     </div>
