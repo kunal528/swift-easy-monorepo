@@ -49,7 +49,7 @@ export async function POST(
 
   const { paramSign, phone } = await req.json();
 
-  const type = "Flow";
+  const type = "Mantle";
 
   const contractAddress = switchTokenContract(type);
 
