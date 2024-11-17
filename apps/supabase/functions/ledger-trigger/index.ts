@@ -10,15 +10,12 @@ interface WebhookPayload {
 
 const supabaseClient = createClient(
   Deno.env.get("SUPABASE_URL") ?? "",
-  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
 );
-
-const OPTIMISED_CONTRACT_ADDRESS = "0xA88E420bBA06379bd7872939fF510e2E3EA62F4a";
-const OPTIMISED_CHAIN = "ARB-SEPOLIA";
 
 const swiftXAPICall = async (
   method: "initTransfer" | "confirmTransfer",
-  body: any,
+  body: any
 ) => {
   const response = await fetch(
     "https://swift-easy-ethbangkok.vercel.app/api/wallet/tx/" + method,
@@ -28,7 +25,7 @@ const swiftXAPICall = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
-    },
+    }
   );
   return response.json();
 };
@@ -42,7 +39,7 @@ const createWallet = async (email: string) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ name: email }),
-    },
+    }
   );
   return await response.json();
 };
@@ -53,15 +50,18 @@ Deno.serve(async (req) => {
   const operation = `${payload.table}:${payload.type}`;
   console.log(operation);
   switch (operation) {
-    case "users:INSERT": {
+    case "users_v3:INSERT": {
       const response = await createWallet(payload.record.email);
-      const { data, error } = await supabaseClient.from("users").update({
-        metadata: response,
-      }).eq("id", payload.record.id);
+      const { data, error } = await supabaseClient
+        .from("users_v3")
+        .update({
+          metadata: response,
+        })
+        .eq("id", payload.record.id);
       console.log(data, error);
       break;
     }
-    case "transactions:INSERT": {
+    case "transactions_v3:INSERT": {
       const amount = eToNumber(payload.record.amount * 10 ** 18);
       const receiverId = payload.record.receiver_id;
       const senderId = payload.record.sender_id;
@@ -70,21 +70,19 @@ Deno.serve(async (req) => {
       console.log("senderId", senderId);
       console.log("amount", amount);
 
-      const { data: receiver } = await supabaseClient.from("users").select(
-        "metadata",
-      ).eq(
-        "id",
-        receiverId,
-      ).single();
+      const { data: receiver } = await supabaseClient
+        .from("users_v3")
+        .select("phone")
+        .eq("id", receiverId)
+        .single();
 
       console.log("receiver", receiver);
 
-      const { data: sender } = await supabaseClient.from("users").select(
-        "metadata",
-      ).eq(
-        "id",
-        senderId,
-      ).single();
+      const { data: sender } = await supabaseClient
+        .from("users_v3")
+        .select("phone")
+        .eq("id", senderId)
+        .single();
 
       console.log("sender", sender);
 
@@ -92,19 +90,19 @@ Deno.serve(async (req) => {
         paramSign: [
           amount,
           payload.record.id,
-          receiver!.metadata.wallets[0].address,
+          "0x69B9c0cA65EAE2694B00451f4A2a7027173eD878",
         ],
-        contractAddress: OPTIMISED_CONTRACT_ADDRESS,
-        walletId: sender!.metadata.wallets.find(
-          (w: any) => w.blockchain === OPTIMISED_CHAIN,
-        ).id,
+        phone: receiver!.phone,
       });
 
       console.log(response);
 
-      const { data, error } = await supabaseClient.from("transactions").update({
-        transaction_hash: response.txHash,
-      }).eq("id", payload.record.id);
+      const { data, error } = await supabaseClient
+        .from("transactions_v3")
+        .update({
+          transaction_hash: response.txHash,
+        })
+        .eq("id", payload.record.id);
 
       console.log(data, error);
       break;
@@ -123,42 +121,31 @@ Deno.serve(async (req) => {
         console.log("senderId", senderId);
         console.log("amount", amount);
 
-        const { data: receiver } = await supabaseClient.from("users").select(
-          "metadata",
-        ).eq(
-          "id",
-          receiverId,
-        ).single();
+        const { data: receiver } = await supabaseClient
+          .from("users_v3")
+          .select("phone")
+          .eq("id", receiverId)
+          .single();
 
         console.log("receiver", receiver);
-
-        const { data: sender } = await supabaseClient.from("users").select(
-          "metadata",
-        ).eq(
-          "id",
-          senderId,
-        ).single();
-
-        console.log("sender", sender);
 
         const response = await swiftXAPICall("confirmTransfer", {
           paramSign: [
             amount,
             payload.record.id,
-            sender!.metadata.wallets[0].address,
+            "0x69B9c0cA65EAE2694B00451f4A2a7027173eD878"
           ],
-          contractAddress: OPTIMISED_CONTRACT_ADDRESS,
-          walletId: receiver!.metadata.wallets.find(
-            (w: any) => w.blockchain === OPTIMISED_CHAIN,
-          ).id,
+          phone: receiver!.phone,
         });
 
         console.log(response);
 
-        const { data, error } = await supabaseClient.from("transactions")
+        const { data, error } = await supabaseClient
+          .from("transactions_v3")
           .update({
             transaction_hash: response.txHash,
-          }).eq("id", payload.record.id);
+          })
+          .eq("id", payload.record.id);
 
         console.log(data, error);
         break;
@@ -170,21 +157,26 @@ Deno.serve(async (req) => {
 
 function eToNumber(num: any) {
   let sign = "";
-  (num += "").charAt(0) == "-" && (num = num.substring(1), sign = "-");
-  let arr = num.split(/[e]/ig);
+  (num += "").charAt(0) == "-" && ((num = num.substring(1)), (sign = "-"));
+  let arr = num.split(/[e]/gi);
   if (arr.length < 2) return sign + num;
-  let dot = (.1).toLocaleString().substr(1, 1),
+  let dot = (0.1).toLocaleString().substr(1, 1),
     n = arr[0],
     exp = +arr[1],
     w = (n = n.replace(/^0+/, "")).replace(dot, ""),
     pos = n.split(dot)[1] ? n.indexOf(dot) + exp : w.length + exp,
     L: any = pos - w.length,
     s = "" + BigInt(w);
-  w = exp >= 0
-    ? (L >= 0 ? s + "0".repeat(L) : r())
-    : (pos <= 0 ? "0" + dot + "0".repeat(Math.abs(pos)) + s : r());
+  w =
+    exp >= 0
+      ? L >= 0
+        ? s + "0".repeat(L)
+        : r()
+      : pos <= 0
+      ? "0" + dot + "0".repeat(Math.abs(pos)) + s
+      : r();
   L = w.split(dot);
-  if (L[0] == 0 && L[1] == 0 || (+w == 0 && +s == 0)) w = 0; //** added 9/10/2021
+  if ((L[0] == 0 && L[1] == 0) || (+w == 0 && +s == 0)) w = 0; //** added 9/10/2021
   return sign + w;
   function r() {
     return w.replace(new RegExp(`^(.{${pos}})(.)`), `$1${dot}$2`);

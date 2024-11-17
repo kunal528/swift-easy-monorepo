@@ -11,11 +11,9 @@ const authorizationPrivateKey =
 function switchTokenContract(type: string) {
   switch (type) {
     case "Mantle":
-      return "";
+      return "0x8EA46796bD806a053AA76AD9F57CF4E151A0b15A";
     case "Flow":
       return "0xE5A8eB6725aB1661e174DCB0C3b9e6A1c2ba77Cc";
-    case "Scroll":
-      return "";
   }
 }
 
@@ -25,20 +23,15 @@ function switchChainId(type: string) {
       return 5003;
     case "Flow":
       return 545;
-    case "Scroll":
-      return 534351;
   }
 }
-
 
 function switchRpcUrl(type: string) {
   switch (type) {
     case "Mantle":
-      return "https://rpc.mantle.xyz";
-    case "Flow":
       return "https://rpc.sepolia.mantle.xyz";
-    case "Scroll":
-      return "https://rpc.scroll.network";
+    case "Flow":
+      return "https://testnet.evm.nodes.onflow.org";
   }
 }
 
@@ -54,7 +47,9 @@ export async function POST(
 
   const { method } = params;
 
-  const { paramSign, type, phone } = await req.json();
+  const { paramSign, phone } = await req.json();
+
+  const type = "Flow";
 
   const contractAddress = switchTokenContract(type);
 
@@ -77,9 +72,7 @@ export async function POST(
     console.log(user);
     const walletAddress = user?.wallet?.address;
 
-    const provider = new ethers.JsonRpcProvider(
-      switchRpcUrl(type)
-    );
+    const provider = new ethers.JsonRpcProvider(switchRpcUrl(type));
 
     // get estimated gas
     const estimatedGas = await provider.estimateGas({
