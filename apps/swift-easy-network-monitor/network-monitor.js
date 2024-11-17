@@ -2,8 +2,16 @@ require("dotenv").config();
 const axios = require("axios");
 const { ethers } = require("ethers");
 
-const OWLRACLE_API_KEY = process.env.OWLRACLE_API_KEY;
+const OWLRACLE_API_KEY = "968ba6e3898c42af9bc16c8b7b39fb47";
 const CONFIG = {
+  FLOW: {
+    RPC: "https://avalanche-mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+    GAS_API: `https://api.owlracle.info/v4/avax/gas?apikey=${OWLRACLE_API_KEY}`,
+  },
+  MANTLE: {
+    RPC: "https://rpc.mantle.xyz",
+    GAS_API: `https://api.owlracle.info/v4/mantle/gas?apikey=${OWLRACLE_API_KEY}`,
+  },
   POLYGON: {
     RPC: "https://polygon-rpc.com/",
     GAS_API: `https://api.owlracle.info/v4/poly/gas?apikey=${OWLRACLE_API_KEY}`,
@@ -11,10 +19,6 @@ const CONFIG = {
   ARBITRUM: {
     RPC: "https://rpc.ankr.com/arbitrum",
     GAS_API: `https://api.owlracle.info/v4/arb/gas?apikey=${OWLRACLE_API_KEY}`,
-  },
-  AVALANCHE: {
-    RPC: "https://avalanche-mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
-    GAS_API: `https://api.owlracle.info/v4/avax/gas?apikey=${OWLRACLE_API_KEY}`,
   },
 };
 
