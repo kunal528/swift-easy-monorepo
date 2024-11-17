@@ -16,7 +16,6 @@
     "lint:nextjs": "yarn workspace nextjs-api-server lint",
     "deploy": "cd apps/nextjs-api-server && npx vercel --prod",
     "supabase": "cd apps && supabase functions deploy ledger-trigger --no-verify-jwt",
-    "wormhole": "cd apps/wormhole-indexer && node wormhole-indexer.js",
     "monitor": "cd apps/swift-easy-network-monitor && node network-monitor.js"
   },
   "dependencies": {
