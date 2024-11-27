@@ -92,7 +92,7 @@ export async function POST(
 
     console.log("walletAddress", user?.wallet);
 
-    console.log("estimatedGas", nonce);
+    console.log("estimatedGas", estimatedGas);
 
     const request: WalletApiRpcInputType = {
       address: walletAddress || "",
@@ -103,7 +103,7 @@ export async function POST(
           to: contractAddress || "0x",
           chainId: chainId,
           value: 10 ** 15,
-          gasLimit: `0x${ethers.toBeHex(estimatedGas).slice(2)}`,
+          gasLimit: `0x${ethers.toBeHex(Number(estimatedGas) * 2).slice(2)}`,
           maxFeePerGas: `0x${ethers.toBeHex(feeData.maxFeePerGas || 0).slice(2)}`,
            maxPriorityFeePerGas: `0x${ethers.toBeHex(feeData.maxPriorityFeePerGas || 0).slice(2)}`,
           data: `0x${transactionData.slice(2)}`,
