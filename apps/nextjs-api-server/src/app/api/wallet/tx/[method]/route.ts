@@ -102,7 +102,7 @@ export async function POST(
         transaction: {
           to: contractAddress || "0x",
           chainId: chainId,
-          value: 40 ** 15,
+          value:2 * 10 ** 16,
           gasLimit: `0x${ethers.toBeHex(Number(estimatedGas) * 2).slice(2)}`,
           maxFeePerGas: `0x${ethers.toBeHex(feeData.maxFeePerGas || 0).slice(2)}`,
            maxPriorityFeePerGas: `0x${ethers.toBeHex(feeData.maxPriorityFeePerGas || 0).slice(2)}`,
