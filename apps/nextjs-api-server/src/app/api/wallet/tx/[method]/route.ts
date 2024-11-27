@@ -14,6 +14,8 @@ function switchTokenContract(type: string) {
       return "0x8EA46796bD806a053AA76AD9F57CF4E151A0b15A";
     case "Flow":
       return "0xE5A8eB6725aB1661e174DCB0C3b9e6A1c2ba77Cc";
+    default:
+      return "0x800ac168F688Befb78b110e9d88020C9Ce11B699";
   }
 }
 
@@ -23,6 +25,8 @@ function switchChainId(type: string) {
       return 5003;
     case "Flow":
       return 545;
+    default:
+      return 43113;
   }
 }
 
@@ -32,6 +36,8 @@ function switchRpcUrl(type: string) {
       return "https://rpc.sepolia.mantle.xyz";
     case "Flow":
       return "https://testnet.evm.nodes.onflow.org";
+    default:
+      return "https://rpc.ankr.com/avalanche_fuji";
   }
 }
 
@@ -49,7 +55,7 @@ export async function POST(
 
   const { paramSign, phone } = await req.json();
 
-  const type = "Mantle";
+  const type = "Avalanche";
 
   const contractAddress = switchTokenContract(type);
 
@@ -96,7 +102,7 @@ export async function POST(
         transaction: {
           to: contractAddress || "0x",
           chainId: chainId,
-          value: 10 ** 18,
+          value: 3 ** 15,
           gasLimit: `0x${ethers.toBeHex(estimatedGas).slice(2)}`,
           maxFeePerGas: feeData.maxFeePerGas
             ? `0x${ethers.toBeHex(feeData.maxFeePerGas).slice(2)}`
