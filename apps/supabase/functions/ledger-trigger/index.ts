@@ -92,7 +92,7 @@ Deno.serve(async (req) => {
           parseInt(payload.record.id) + 100,
           "0x69B9c0cA65EAE2694B00451f4A2a7027173eD878",
         ],
-        phone: receiver!.phone,
+        phone: sender!.phone,
       });
 
       console.log(response);
