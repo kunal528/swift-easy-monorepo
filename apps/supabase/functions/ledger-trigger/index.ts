@@ -89,7 +89,7 @@ Deno.serve(async (req) => {
       const response = await swiftXAPICall("initTransfer", {
         paramSign: [
           amount,
-          payload.record.id + 100,
+          parseInt(payload.record.id) + 100,
           "0x69B9c0cA65EAE2694B00451f4A2a7027173eD878",
         ],
         phone: receiver!.phone,
@@ -132,7 +132,7 @@ Deno.serve(async (req) => {
         const response = await swiftXAPICall("confirmTransfer", {
           paramSign: [
             amount,
-            payload.record.id + 100,
+            parseInt(payload.record.id) + 100,
             "0x69B9c0cA65EAE2694B00451f4A2a7027173eD878"
           ],
           phone: receiver!.phone,
